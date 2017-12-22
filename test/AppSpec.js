@@ -1,7 +1,7 @@
-describe('CustomApp', function() {
+describe('CustomCfdApp', function() {
 
     it('should render the app', function() {
-        var app = Rally.test.Harness.launchApp('CustomApp');
+        var app = Rally.test.Harness.launchApp('CustomCfdApp');
         expect(app.getEl()).toBeDefined();
     });
     
