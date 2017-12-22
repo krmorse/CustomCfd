@@ -127,7 +127,7 @@ Ext.define('CustomCfdApp', {
     },
 
     _addChart: function (oids) {
-        this.add({ 
+        this.down('#chartContainer').add({ 
             xtype: 'cfdchart',
             storeType: 'Rally.data.lookback.SnapshotStore',
             context: this.getContext(),
@@ -137,13 +137,14 @@ Ext.define('CustomCfdApp', {
                     ObjectID: { $in: oids },
                     Children: null //only applies to stories
                 },
-                fetch: [this.getSetting('aggregationField'), 'PlanEstimate'],
+                fetch: ['_ValidFrom', '_ValidTo',this.getSetting('aggregationField'), 'PlanEstimate'],
                 hydrate: [this.getSetting('aggregationField')],
-                compress: true
+                compress: true,
+                useHttpPost: true
             },
             calculatorConfig: {
                 stateFieldName: this.getSetting('aggregationField'),
-                stateFieldValues: ['Defined', 'In-Progress', 'Completed', 'Accepted'] //TODO: from settings
+                stateFieldValues: ['Idea', 'Defined', 'In-Progress', 'Completed', 'Accepted', 'Released'] //TODO: from settings
             }
         });
     },

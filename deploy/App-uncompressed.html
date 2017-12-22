@@ -192,6 +192,18 @@
 
     config: {
         calculatorType: 'CfdCalculator',
+        chartColors: [
+            "#FF8200", // $orange
+            "#F6A900", // $gold
+            "#FAD200", // $yellow
+            "#8DC63F", // $lime
+            "#1E7C00", // $green_dk
+            "#337EC6", // $blue_link
+            "#005EB8", // $blue
+            "#7832A5", // $purple,
+            "#DA1884",  // $pink,
+            "#C0C0C0" // $grey4
+        ],
         chartConfig: {
             chart: {
                 type: 'area'
@@ -366,7 +378,7 @@
     },
 
     _addChart: function (oids) {
-        this.add({ 
+        this.down('#chartContainer').add({ 
             xtype: 'cfdchart',
             storeType: 'Rally.data.lookback.SnapshotStore',
             context: this.getContext(),
@@ -376,13 +388,14 @@
                     ObjectID: { $in: oids },
                     Children: null //only applies to stories
                 },
-                fetch: [this.getSetting('aggregationField'), 'PlanEstimate'],
+                fetch: ['_ValidFrom', '_ValidTo',this.getSetting('aggregationField'), 'PlanEstimate'],
                 hydrate: [this.getSetting('aggregationField')],
-                compress: true
+                compress: true,
+                useHttpPost: true
             },
             calculatorConfig: {
                 stateFieldName: this.getSetting('aggregationField'),
-                stateFieldValues: ['Defined', 'In-Progress', 'Completed', 'Accepted'] //TODO: from settings
+                stateFieldValues: ['Idea', 'Defined', 'In-Progress', 'Completed', 'Accepted', 'Released'] //TODO: from settings
             }
         });
     },
