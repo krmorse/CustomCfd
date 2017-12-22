@@ -31,6 +31,8 @@ Ext.define('CustomCfdApp', {
             aggregationField: 'ScheduleState',
             aggregationFieldValues: 'Idea,Defined,In-Progress,Completed,Accepted,Released',
             aggregationType: 'points',
+            startDate: '',
+            endDate: '',
             query: ''
         }
     },
@@ -161,6 +163,9 @@ Ext.define('CustomCfdApp', {
     },
 
     _addChart: function (oids) {
+        var startDate = this.getSetting('startDate'),
+            endDate = this.getSetting('endDate');
+            
         this.down('#chartContainer').add({
             xtype: 'cfdchart',
             loadMask: false,
@@ -187,7 +192,9 @@ Ext.define('CustomCfdApp', {
             calculatorConfig: {
                 stateFieldName: this.getSetting('aggregationField'),
                 stateFieldValues: this.getSetting('aggregationFieldValues').split(','),
-                pointsOrCount: this.getSetting('aggregationType')
+                pointsOrCount: this.getSetting('aggregationType'),
+                startDate: moment(startDate || new Date()).toDate(),
+                endDate: moment(endDate || new Date()).toDate(),
             }
         });
     },

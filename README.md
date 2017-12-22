@@ -24,5 +24,11 @@ Pick the values of the field chosen above to include in the chart.  This is espe
 #### Aggregation Type
 Pick how the data should be aggregated- via a simple count or by summing the plan estimates.
 
+#### Start Date
+The date at which the chart should begin.
+
+#### End Date
+The date at which the chart should end.
+
 #### Query
 In addition to the advanced filtering component in the app, you can write your own complex filter queries. [Extensive documentation](https://help.rallydev.com/grid-queries?basehost=https://rally1.rallydev.com) is available. This might be useful if you want to always limit the chart to certain complex criteria.

@@ -180,6 +180,28 @@ Ext.define('Settings', {
                 },
                 lastQuery: ''
             },
+            {
+                name: 'startDate',
+                xtype: 'rallydatefield',
+                plugins: ['rallyfieldvalidationui'],
+                allowBlank: false,
+                fieldLabel: 'Start Date',
+                getSubmitValue: function() {
+                    var value = Rally.util.DateTime.toIsoString(this.getValue());
+                    return value.split('T')[0];
+                }
+            },
+            {
+                name: 'endDate',
+                xtype: 'rallydatefield',
+                plugins: ['rallyfieldvalidationui'],
+                allowBlank: false,
+                fieldLabel: 'End Date',
+                getSubmitValue: function() {
+                    var value = Rally.util.DateTime.toIsoString(this.getValue());
+                    return value.split('T')[0];
+                }
+            },
             { type: 'query' }
         ];
     }
