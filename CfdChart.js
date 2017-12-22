@@ -39,9 +39,7 @@ Ext.define('CfdChart', {
             yAxis: [
                 {
                     title: {
-                        text: this.pointsOrCount === 'points' ?
-                            (this.context().getWorkspace().WorkspaceConfiguration.ReleaseEstimateUnitName || 'Points') :
-                            'Count'
+                        text: ''
                     }
                 }
             ],
@@ -61,7 +59,11 @@ Ext.define('CfdChart', {
     constructor: function (config) {
         config = config || {};
         this.mergeConfig(config);
-
+        
+        this.chartConfig.yAxis[0].title.text = this.pointsOrCount === 'points' ?
+        (this.getContext().getWorkspace().WorkspaceConfiguration.ReleaseEstimateUnitName || 'Points') :
+        'Count';
+        
         this.callParent([this.config]);
-    }
+    },
 });
