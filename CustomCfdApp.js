@@ -20,6 +20,7 @@ Ext.define('CustomCfdApp', {
         {
             xtype: 'container',
             itemId: 'chartContainer',
+            layout: 'fit',
             flex: 1
         }
     ],
