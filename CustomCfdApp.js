@@ -29,7 +29,8 @@ Ext.define('CustomCfdApp', {
         defaultSettings: {
             types: 'HierarchicalRequirement,Defect',
             aggregationField: 'ScheduleState',
-            aggregationType: 'count',
+            aggregationValues: 'Defined,In-Progress,Completed,Accepted',
+            aggregationType: 'points',
             query: ''
         }
     },
@@ -145,7 +146,8 @@ Ext.define('CustomCfdApp', {
             },
             calculatorConfig: {
                 stateFieldName: this.getSetting('aggregationField'),
-                stateFieldValues: ['Idea', 'Defined', 'In-Progress', 'Completed', 'Accepted', 'Released'] //TODO: from settings
+                stateFieldValues: this.getSetting('aggregationValues').split(','),
+                pointsOrCount: this.getSetting('aggregationType')
             }
         });
     },
