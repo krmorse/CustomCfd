@@ -8,7 +8,10 @@ Ext.define('CfdCalculator', {
     },
 
     constructor: function (config) {
-        this.initConfig(config);
+        config = config || {};
+        this.mergeConfig(config);
+
+        this.callParent([this.config]);
     },
 
     getMetrics: function () {

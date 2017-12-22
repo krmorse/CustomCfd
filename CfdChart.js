@@ -31,7 +31,7 @@ Ext.define('CfdChart', {
             },
             xAxis: {
                 tickmarkPlacement: 'on',
-                tickInterval: 15,
+                tickInterval: 15, //TODO: make dynamic if there's a lot of data?
                 title: {
                     text: 'Date'
                 }
@@ -39,7 +39,9 @@ Ext.define('CfdChart', {
             yAxis: [
                 {
                     title: {
-                        text: 'Points' //TODO: or count
+                        text: this.pointsOrCount === 'points' ?
+                            (this.context().getWorkspace().WorkspaceConfiguration.ReleaseEstimateUnitName || 'Points') :
+                            'Count'
                     }
                 }
             ],

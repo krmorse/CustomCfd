@@ -9,9 +9,9 @@ Ext.define('CustomCfdApp', {
 
     items: [
         {
-            xtype: 'container',
+            xtype: 'rallyleftright',
             itemId: 'header',
-            height: 26
+            height: 30
         },
         {
             xtype: 'container',
@@ -55,10 +55,11 @@ Ext.define('CustomCfdApp', {
             whiteListFields = ['Milestones', 'Tags'],
             modelNames = this._getTypesSetting();
 
-        this.down('#header').add({
+        this.down('#header').getLeft().add({
             xtype: 'rallyinlinefiltercontrol',
             context: this.getContext(),
             height: 26,
+            align: 'left',
             inlineFilterButtonConfig: {
                 stateful: true,
                 stateId: this.getContext().getScopedStateId('inline-filter'),
@@ -87,6 +88,22 @@ Ext.define('CustomCfdApp', {
                     inlinefilterready: this._onFilterReady,
                     scope: this
                 }
+            }
+        });
+        this.down('#header').getRight().add({
+            xtype: 'rallybutton',
+            cls: 'secondary rly-small',
+            margin: '3px 20px 0 0',
+            frame: false,
+            iconCls: 'icon-export',
+            toolTipConfig: {
+                html: 'Export',
+                anchor: 'top',
+                hideDelay: 0
+            },
+            listeners: {
+                click: this._onExportClick,
+                scope: this
             }
         });
     },
@@ -119,18 +136,35 @@ Ext.define('CustomCfdApp', {
         });
     },
 
-    _onWsapiDataRetrieved: function(store) {
-        this.down('#chartContainer').setLoading(false);
-        var oids = _.map(store.getRange(), function(record) {
+    _onWsapiDataRetrieved: function (store) {
+        var oids = _.map(store.getRange(), function (record) {
             return record.getId();
         });
-        
+
         this._addChart(oids);
     },
 
+    _onExportClick: function () {
+        var link = document.createElement('a');
+        var chartData = this.down('rallychart').chartData;
+        var data = _.reduce(chartData.categories, function(accum, category, i) {
+            var row = [category];
+            _.each(chartData.series, function(series) {
+                row.push(series.data[i]);
+            });
+            accum.push(row.join(','));
+            return accum;
+        }, [['Date'].concat(_.pluck(chartData.series, 'name')).join(',')]);
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURI(data.join('\n')));
+        link.setAttribute('download', 'cfd.csv');
+        link.click();
+    },
+
     _addChart: function (oids) {
-        this.down('#chartContainer').add({ 
+        this.down('#chartContainer').add({
             xtype: 'cfdchart',
+            loadMask: false,
+            pointsOrCount: this.getSetting('aggregationType'),
             storeType: 'Rally.data.lookback.SnapshotStore',
             context: this.getContext(),
             storeConfig: {
@@ -139,10 +173,16 @@ Ext.define('CustomCfdApp', {
                     ObjectID: { $in: oids },
                     Children: null //only applies to stories
                 },
-                fetch: ['_ValidFrom', '_ValidTo',this.getSetting('aggregationField'), 'PlanEstimate'],
+                fetch: ['_ValidFrom', '_ValidTo', this.getSetting('aggregationField'), 'PlanEstimate'],
                 hydrate: [this.getSetting('aggregationField')],
                 compress: true,
-                useHttpPost: true
+                useHttpPost: true,
+                listeners: {
+                    load: function () {
+                        this.down('#chartContainer').setLoading(false);
+                    },
+                    scope: this
+                }
             },
             calculatorConfig: {
                 stateFieldName: this.getSetting('aggregationField'),
